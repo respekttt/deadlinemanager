@@ -8,7 +8,7 @@
 | C2  | Лінт (ESLint через `bunx`)                                                                    | `make lint`       |     ✓      |          |   ✓    |
 | C3  | Аудит меж модулів (dependency-cruiser через `bunx`, правила з spec §2)                        | `make boundaries` |     ✓      |          |   ✓    |
 | C4  | Unit- і API-тести                                                                             | `make test`       |            |    ✓     |   ✓    |
-| C5  | Кожен AC зі spec має тест `AC-N:`                                                             | `make ac-check`   |            |    ✓     |   ✓    |
+| C5  | Кожен AC зі spec із завдання ≤ `TASK` (`Makefile`) має тест `AC-N:`                           | `make ac-check`   |            |    ✓     |   ✓    |
 | C6  | Покриття рядків ≥ 80 % (`bun test --coverage`, поріг у `bunfig.toml`)                         | `make coverage`   |            |          |   ✓    |
 | C7  | Smoke: сервер стартує на порожній БД, `GET /health` → 200                                     | `make smoke`      |            |    ✓     |   ✓    |
 | C8  | Збірка: `bun install --frozen-lockfile` + застосування `schema.sql` до порожньої БД           | `make build`      |            |          |   ✓    |

@@ -1,6 +1,8 @@
 # Єдина точка входу перевірок (ADR 0008). ID перевірок — standards/checklist.md.
 SHELL := sh
 BASE ?=
+# Поточне завдання курсу: C5 вимагає тести лише для AC із колонкою «Завдання» ≤ TASK (spec §6).
+TASK ?= 1
 
 .PHONY: run fmt fmt-check lint boundaries test ac ac-check coverage smoke build audit \
 	spec-check log-check check prepush ci
@@ -29,7 +31,7 @@ ac: # make ac ID=AC-N
 
 ac-check: # C5
 	@missing=0; \
-	for id in $$(grep -E '^\| AC-[0-9]+ .*make ac ID=' standards/spec.md | grep -oE '^\| AC-[0-9]+' | grep -oE 'AC-[0-9]+'); do \
+	for id in $$(awk -F'|' -v t=$(TASK) '$$2 ~ /AC-[0-9]+/ && $$3+0 <= t && $$(NF-1) ~ /make ac ID=/ { gsub(/ /, "", $$2); print $$2 }' standards/spec.md); do \
 	  grep -rqF "$$id:" tests || { echo "C5: немає тесту $$id:"; missing=1; }; \
 	done; \
 	exit $$missing

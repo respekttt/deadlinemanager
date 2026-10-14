@@ -309,3 +309,30 @@ package.json
 - Виправлено: точні версії в `package.json` + `engines.bun`; `eslint.config.js`, `.prettierrc.json`, `.prettierignore`, `.dependency-cruiser.cjs` (правила spec §2), `bunfig.toml` (поріг 80 %); усі таргети C1–C11 у `Makefile`; `.github/workflows/ci.yml`; `server/db` (`schema.sql`, `seed.sql`, `openDb`); smoke на порожній БД; `.gitattributes` з `eol=lf`; Markdown відформатовано Prettier.
 - `make check` зелений; `make ac-check` (C5) падає, доки не реалізовано AC-1…AC-14.
 - Коміт `4f88bf8`, push `task1` з `--no-verify` (за рішенням користувача; C5 блокує pre-push).
+
+# Сесія 7 — DEFENSE і C5 за завданнями
+
+## 2026-10-14 — DEFENSE.md і прив'язка AC до завдань
+
+**Мета:** заповнити DEFENSE за шаблоном на основі журналів сесій; зробити C5 зеленою на етапі фундаменту, не обходячи перевірку.
+
+**Промпти:**
+
+```text
+На основі всіх минулих сесій по промпт логам зроби defense.md по цьому шаблону: …
+```
+
+```text
+нам треба make ac-check робити?
+```
+
+```text
+дєлай 3
+```
+
+**Результат:**
+
+- `defense.md`: що реалізовано, топ-3 виправлень проти spec, ключове рішення (ADR 0001), результати `make smoke` / `make check` / `make ac-check`, посилання на PR #1.
+- spec §6: колонка «Завдання» в таблиці AC (AC-1…AC-14 → 2, AC-15 → 1).
+- `Makefile`: `TASK ?= 1`; `ac-check` (C5) бере з spec лише AC завдань ≤ `TASK`. Оновлено checklist (C5) і DoD (D3).
+- Відхилено: заглушки `test.todo` (формально зелено, по суті обхід C5) і вимкнення C5.
