@@ -286,7 +286,7 @@ package.json
 - На remote створено `main` з `13aeda6` («init branch»).
 - `gh` не встановлено, тож PR треба відкрити вручну: https://github.com/respekttt/deadlinemanager/compare/main...task1?expand=1
 
-# Сесія 6 — аудит структури й залежностей
+# Сесія 6 — аудит структури й залежностей (`ai/sessions/05_Audit.txt`)
 
 ## 2026-10-14 — Аудит за spec і виправлення
 
@@ -308,3 +308,4 @@ package.json
 - Топ-3 залежності: ESLint/Prettier/dependency-cruiser не були в `devDependencies` (`bunx` тягнув latest); `fastify: "5"` без фіксації; `make` як неописана системна залежність.
 - Виправлено: точні версії в `package.json` + `engines.bun`; `eslint.config.js`, `.prettierrc.json`, `.prettierignore`, `.dependency-cruiser.cjs` (правила spec §2), `bunfig.toml` (поріг 80 %); усі таргети C1–C11 у `Makefile`; `.github/workflows/ci.yml`; `server/db` (`schema.sql`, `seed.sql`, `openDb`); smoke на порожній БД; `.gitattributes` з `eol=lf`; Markdown відформатовано Prettier.
 - `make check` зелений; `make ac-check` (C5) падає, доки не реалізовано AC-1…AC-14.
+- Коміт `4f88bf8`, push `task1` з `--no-verify` (за рішенням користувача; C5 блокує pre-push).
