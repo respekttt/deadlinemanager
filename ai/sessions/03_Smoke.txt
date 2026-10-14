@@ -1,0 +1,22 @@
+ ▐▛███▛█   Claude Code v2.1.299
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   C:\Programming\deadlinemanager
+
+❯ Зроби мінімальний смок тест, та потім імпортуй цю ж сесію в folder ai
+
+● Smoke-тест зелений (`bun test` і реальний запуск сервера → `200`). Тепер експортую цю сесію в `ai/sessions/`.
+
+● Готово.
+
+  Smoke-тест (C7):
+  - package.json — ESM, fastify@5, скрипт prepare (core.hooksPath .githooks).
+  - server/routes/health.js — GET /health → 200 { "status": "ok" }.
+  - server/main.js — buildApp() для тестів; при прямому запуску слухає PORT (за замовчуванням 3000).
+  - tests/smoke.test.js — bun:test + app.inject(), перевіряє статус 200 і тіло.
+  - Makefile — цілі run і smoke.
+  - .gitignore — node_modules/, data/.
+
+  Перевірка: bun test tests/smoke.test.js → 1 pass; реальний запуск сервера,
+  curl /health → {"status":"ok"} 200.
+
+  Сесію збережено в ai/sessions/04_Smoke.txt, запис додано в ai/prompts-log.md.

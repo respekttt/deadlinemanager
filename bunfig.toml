@@ -1,0 +1,4 @@
+[test]
+# C6: покриття рядків ≥ 80 % (standards/checklist.md)
+coverageThreshold = { lines = 0.8 }
+coverageSkipTestFiles = true
