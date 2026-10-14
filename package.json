@@ -1,0 +1,11 @@
+{
+  "name": "deadlinehub",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true"
+  },
+  "dependencies": {
+    "fastify": "5"
+  }
+}

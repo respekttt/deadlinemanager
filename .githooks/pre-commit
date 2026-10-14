@@ -1,0 +1,3 @@
+#!/bin/sh
+# C1–C3: формат, лінт, межі модулів (standards/checklist.md)
+exec make check

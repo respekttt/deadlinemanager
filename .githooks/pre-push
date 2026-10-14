@@ -1,0 +1,3 @@
+#!/bin/sh
+# C4, C5, C7: тести, AC-покриття, smoke (standards/checklist.md)
+exec make prepush
