@@ -32,7 +32,7 @@ make run           # http://localhost:3000
 
 Потрібні Bun ≥ 1.3 і GNU Make. У Windows `make` за замовчуванням немає: `winget install ezwinports.make` (хуки працюють через Git Bash).
 
-Змінні середовища: `PORT` (за замовчуванням `3000`), `DB_PATH` (за замовчуванням `./data/deadlinehub.db`).
+Змінні середовища: `PORT` (за замовчуванням `3000`), `DB_PATH` (за замовчуванням `./data/deadlinehub.db`), `GIT_SHA` (версія для `GET /version`; за замовчуванням — `git rev-parse --short HEAD`).
 
 ```bash
 curl -X POST localhost:3000/tasks -H 'Content-Type: application/json' \
@@ -41,6 +41,7 @@ curl -X PATCH localhost:3000/tasks/1/status -H 'Content-Type: application/json' 
   -d '{"status":"in_progress"}'
 curl 'localhost:3000/tasks?status=in_progress&sort=dueAt'
 curl localhost:3000/tasks/1/history
+curl localhost:3000/version   # {"version":"<sha>"}
 ```
 
 ## Команди
