@@ -15,13 +15,13 @@ REST API (JSON) для відстеження навчальних дедлай�
 
 ## Стек
 
-| Що | Чим |
-|---|---|
-| Runtime | Bun ≥ 1.3 (ESM) |
-| HTTP | Fastify 5 |
-| БД | SQLite через вбудований `bun:sqlite` |
-| Тести | `bun:test` + `app.inject()` (без запуску порту) |
-| Якість | Prettier, ESLint, dependency-cruiser |
+| Що      | Чим                                             |
+| ------- | ----------------------------------------------- |
+| Runtime | Bun ≥ 1.3 (ESM)                                 |
+| HTTP    | Fastify 5                                       |
+| БД      | SQLite через вбудований `bun:sqlite`            |
+| Тести   | `bun:test` + `app.inject()` (без запуску порту) |
+| Якість  | Prettier, ESLint, dependency-cruiser            |
 
 ## Швидкий старт
 
@@ -29,6 +29,8 @@ REST API (JSON) для відстеження навчальних дедлай�
 bun install        # також вмикає .githooks (core.hooksPath)
 make run           # http://localhost:3000
 ```
+
+Потрібні Bun ≥ 1.3 і GNU Make. У Windows `make` за замовчуванням немає: `winget install ezwinports.make` (хуки працюють через Git Bash).
 
 Змінні середовища: `PORT` (за замовчуванням `3000`), `DB_PATH` (за замовчуванням `./data/deadlinehub.db`).
 
@@ -43,13 +45,13 @@ curl localhost:3000/tasks/1/history
 
 ## Команди
 
-| Команда | Що робить |
-|---|---|
-| `make run` | запуск сервера |
-| `make test` | усі тести |
-| `make ac ID=AC-3` | тести одного критерію прийняття |
-| `make check` | швидкі перевірки (формат, лінт, межі модулів) |
-| `make ci` | повний набір перевірок, як у CI |
+| Команда           | Що робить                                     |
+| ----------------- | --------------------------------------------- |
+| `make run`        | запуск сервера                                |
+| `make test`       | усі тести                                     |
+| `make ac ID=AC-3` | тести одного критерію прийняття               |
+| `make check`      | швидкі перевірки (формат, лінт, межі модулів) |
+| `make ci`         | повний набір перевірок, як у CI               |
 
 Повний перелік перевірок — [standards/checklist.md](standards/checklist.md).
 

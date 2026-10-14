@@ -1,12 +1,15 @@
 import Fastify from 'fastify';
+import { openDb } from './db/index.js';
 import healthRoutes from './routes/health.js';
 
-export function buildApp() {
+export function buildApp({ db }) {
   const app = Fastify();
+  app.addHook('onClose', async () => db.close());
   app.register(healthRoutes);
   return app;
 }
 
 if (import.meta.main) {
-  await buildApp().listen({ port: Number(process.env.PORT ?? 3000) });
+  const db = openDb(process.env.DB_PATH ?? './data/deadlinehub.db');
+  await buildApp({ db }).listen({ port: Number(process.env.PORT ?? 3000) });
 }

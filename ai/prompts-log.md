@@ -123,6 +123,7 @@ package.json
 ````
 
 **Результат:**
+
 - README.md: опис, можливості, стек, швидкий старт, приклади `curl`, команди, структура, посилання на стандарти.
 - `standards/spec.md`: межі, таблиця модулів і заборонених залежностей, патерни, API, ER, сценарії S1–S4, критерії AC-1…AC-15 із командами перевірки.
 - `standards/checklist.md`: перевірки C1–C11 і де вони запускаються (pre-commit, pre-push, CI).
@@ -140,6 +141,7 @@ package.json
 ```
 
 **Результат:**
+
 - Runtime — Bun ≥ 1.3, HTTP — Fastify 5, БД — `bun:sqlite`, тести — `bun:test` + `app.inject()` (без запуску порту).
 - `make ac ID=AC-N` → `bun test -t "AC-N:"`; покриття — `bun test --coverage` з порогом у `bunfig.toml`; збірка — `bun install --frozen-lockfile`; аудит — `bun audit`.
 - Prettier, ESLint і dependency-cruiser залишено (запуск через `bunx`), бо вбудованих аналогів у Bun немає.
@@ -157,6 +159,7 @@ package.json
 ```
 
 **Результат:**
+
 - Bun 1.3.14 запускає `prepare` з `package.json` проєкту на `bun install`, зокрема з `--frozen-lockfile`; з `--ignore-scripts` — ні. Окрема ціль `make hooks` не потрібна.
 - Поза git-репозиторієм `git config` падає з кодом 128, тому в `standards/checklist.md` зафіксовано скрипт `git config core.hooksPath .githooks || true`.
 
@@ -215,6 +218,7 @@ package.json
 ```
 
 **Результат:**
+
 - spec §2: `routes` може імпортувати з `domain` лише `errors.js` і `schemas.js`; `bun:sqlite` — лише `db` і `repositories`, а підключення створює `main.js`.
 - spec §5 S1: додано крок валідації за JSON Schema у Fastify; перевірку `courseId` перенесено в `CreateTaskCommand` (`services`).
 - checklist: Prettier, ESLint і dependency-cruiser фіксуються в `devDependencies`, `bunx` лише їх запускає (C8, C9).
@@ -237,6 +241,7 @@ package.json
 ```
 
 **Результат:**
+
 - З усіх ADR і шаблону `adr-template-minimal.md` прибрано поле `Status`.
 - ADR 0005 (ESLint) і 0006 (Prettier) об'єднано в `0005-lint-format-choice.md`: ESLint + Prettier, розглянуті Biome, JSHint + ручне форматування, ESLint зі стилістичними правилами — з перевагами й недоліками кожного.
 - Наступні ADR перенумеровано: 0007→0006 (межі модулів), 0008→0007 (git-хуки), 0009→0008 (Makefile), 0010→0009 (валідація); посилання оновлено. Номери ADR у записах вище — історичні.
@@ -255,7 +260,51 @@ package.json
 ```
 
 **Результат:**
+
 - `package.json` (ESM, `fastify@5`, скрипт `prepare`), `bun.lock`, `.gitignore`.
 - `server/routes/health.js` — `GET /health` → `200 { "status": "ok" }`; `server/main.js` — `buildApp()` і запуск на `PORT`.
 - `tests/smoke.test.js` — `bun:test` + `app.inject()`; `Makefile` — цілі `run` і `smoke`.
 - БД ще немає, тож «старт на порожній БД» з C7 буде покрито, коли з'явиться `server/db`.
+
+# Сесія 5 — коміт і PR (`ai/sessions/04_PR.txt`)
+
+## 2026-10-14 — Коміт усього та pull request
+
+**Мета:** закомітити весь доробок Task 1 і відкрити PR `task1 → main`.
+
+**Промпт:**
+
+```text
+Зроби пул реквест, та закоміть це все
+```
+
+**Результат:**
+
+- Встановлено GNU Make 4.4.1 (winget `ezwinports.make`).
+- Pre-commit/pre-push хуки падають: у `Makefile` немає таргетів `check` і `prepush`. За рішенням користувача коміт і пуш зроблено з `--no-verify`.
+- Коміт `ed7d8ec` «Task 1: стандарти, ADR, каркас сервера та smoke-тест», гілку `task1` запушено.
+- На remote створено `main` з `13aeda6` («init branch»).
+- `gh` не встановлено, тож PR треба відкрити вручну: https://github.com/respekttt/deadlinemanager/compare/main...task1?expand=1
+
+# Сесія 6 — аудит структури й залежностей
+
+## 2026-10-14 — Аудит за spec і виправлення
+
+**Мета:** перевірити, чи структура відповідає `standards/spec.md`, знайти зайві/неправильні залежності й виправити.
+
+**Промпти:**
+
+```text
+Зроби Аудит: чи структура відповідає spec; топ-3 зайві/неправильні залежності.
+```
+
+```text
+Виправи це все сам
+```
+
+**Результат:**
+
+- Аудит: межі модулів не порушено, але бракувало `server/db`, конфігів інструментів, таргетів `Makefile` і CI; хуки викликали неіснуючі таргети.
+- Топ-3 залежності: ESLint/Prettier/dependency-cruiser не були в `devDependencies` (`bunx` тягнув latest); `fastify: "5"` без фіксації; `make` як неописана системна залежність.
+- Виправлено: точні версії в `package.json` + `engines.bun`; `eslint.config.js`, `.prettierrc.json`, `.prettierignore`, `.dependency-cruiser.cjs` (правила spec §2), `bunfig.toml` (поріг 80 %); усі таргети C1–C11 у `Makefile`; `.github/workflows/ci.yml`; `server/db` (`schema.sql`, `seed.sql`, `openDb`); smoke на порожній БД; `.gitattributes` з `eol=lf`; Markdown відформатовано Prettier.
+- `make check` зелений; `make ac-check` (C5) падає, доки не реалізовано AC-1…AC-14.
