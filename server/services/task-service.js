@@ -1,0 +1,45 @@
+import { log } from '../context.js';
+import { NotFoundError } from '../domain/errors.js';
+import { Task } from '../domain/task.js';
+
+// Бізнес-операції над задачами. Ресурси — через конструктор, ініціатор і requestId — з контексту (ADR 0010).
+export class TaskService {
+  constructor({ repos, events, strategies, now = () => new Date() }) {
+    Object.assign(this, { repos, events, strategies, now });
+  }
+
+  run(command) {
+    const now = this.now();
+    const event = this.repos.transaction(() => {
+      const ev = command.execute({ repos: this.repos, now });
+      this.events.publish(ev, { repos: this.repos, now });
+      return ev;
+    });
+    log.info({ event: event.type, taskId: event.task.id }, 'business event');
+    return event.task.toView(now);
+  }
+
+  get(id) {
+    return this.#find(id).toView(this.now());
+  }
+
+  list(query) {
+    const now = this.now();
+    let tasks = this.repos.tasks.list().map((r) => new Task(r));
+    for (const [param, strategy] of Object.entries(this.strategies)) {
+      if (query[param] !== undefined) tasks = strategy.apply(tasks, { now, value: query[param] });
+    }
+    return tasks.map((t) => t.toView(now));
+  }
+
+  history(id) {
+    this.#find(id);
+    return this.repos.history.listByTaskId(id);
+  }
+
+  #find(id) {
+    const record = this.repos.tasks.findById(id);
+    if (!record) throw new NotFoundError(`Задачу ${id}`);
+    return new Task(record);
+  }
+}

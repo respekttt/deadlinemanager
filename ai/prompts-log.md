@@ -409,3 +409,23 @@ package.json
   - `IdempotencyRepository` додано в порти, `context` — у залежності `services` і `repositories`;
   - AC-23: заборону SQL у роутах перевіряє C3 (імпорти), а не ESLint.
 - spec стиснуто з 204 до 138 рядків: ER-діаграма лише зі зв'язками + таблиця колонок, деталі контексту винесено в ADR 0010, запити — списком.
+
+## 2026-11-20 — схема, правила перевірок і прототип на in-memory репозиторіях
+
+**Промпт (дослівно):**
+
+```text
+Роби
+```
+
+(відповідь на пропозицію AI: «оновити `schema.sql` … і правила в `.dependency-cruiser.cjs` та `eslint.config.js`. Після цього можна братися за прототип на in-memory репозиторіях».)
+
+**Результат:**
+
+- `schema.sql`: `task_history.changed_by`, таблиця `idempotency_keys`; `openDb` вмикає `journal_mode = WAL`.
+- C3: правила `context-isolated` і `repositories-no-upper-layers`. C2: `no-restricted-syntax` забороняє `try/catch` у `server/routes` (AC-23).
+- Прототип (spec §5, «Етапи», крок 1): `domain` (Task, State, схеми, помилки), `services` (TaskService, команди, стратегії, EventBus, HistoryRecorder), `context.js` (ALS), `repositories/memory`, `routes/tasks.js`, `main.js` (хук `onRequest`, `setErrorHandler`, `setNotFoundHandler`).
+- Тести на прототипі: AC-1…AC-14, AC-17…AC-20. AC-21 і AC-22 — на етапі БД. `TASK` у `Makefile` лишається `1`, доки їх немає.
+- Знахідки AI під час перевірки:
+  - Bun без явного `functions` у `coverageThreshold` перевіряє і покриття функцій, а неявний конструктор класу рахує непокритою функцією. Стани переписано на об'єкти, `EventBus` отримав явний конструктор; поріг не послаблювали.
+  - `requestIdLogLabel` у Fastify 5 застарів, замінено на `LogController`.
