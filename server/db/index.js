@@ -9,6 +9,7 @@ export function openDb(path = ':memory:') {
   if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
   const db = new Database(path, { strict: true });
   db.run('PRAGMA foreign_keys = ON');
+  db.run('PRAGMA journal_mode = WAL');
   db.run(schema);
   db.run(seed);
   return db;
