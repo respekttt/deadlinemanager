@@ -37,3 +37,10 @@ export class SourceUnavailableError extends DomainError {
     this.cause = cause;
   }
 }
+
+// Внутрішня: ключ зайняв паралельний запит між find і insert. TaskService перезапускає команду (spec §5, S1).
+export class IdempotencyRaceError extends DomainError {
+  constructor() {
+    super('IDEMPOTENCY_RACE', 'Idempotency-Key зайнято паралельним запитом');
+  }
+}

@@ -36,7 +36,7 @@ make run           # http://localhost:3000
 
 Заголовки запиту: `X-User-Id` (ініціатор, інакше `anonymous`), `X-Request-Id` (ID бізнес-процесу, інакше генерується; завжди повертається у відповіді), `Idempotency-Key` для `POST /tasks`.
 
-> Етап 1 (прототип): дані зберігаються в пам'яті процесу (`server/repositories/memory`) і зникають після перезапуску.
+> Дані зберігаються в SQLite (`DB_PATH`). In-memory репозиторії (`server/repositories/memory`) лишилися для unit-тестів; API-тести проходять на обох сховищах.
 
 ```bash
 curl -X POST localhost:3000/tasks -H 'Content-Type: application/json' \

@@ -2,7 +2,7 @@
 SHELL := sh
 BASE ?=
 # Поточне завдання курсу: C5 вимагає тести лише для AC із колонкою «Завдання» ≤ TASK (spec §6).
-TASK ?= 1
+TASK ?= 2
 
 .PHONY: run fmt fmt-check lint boundaries test ac ac-check coverage smoke build audit \
 	spec-check log-check check prepush ci

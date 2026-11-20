@@ -4,6 +4,7 @@ import Fastify, { LogController } from 'fastify';
 import { als, setRootLogger } from './context.js';
 import { openDb } from './db/index.js';
 import { createMemoryRepos } from './repositories/memory/index.js';
+import { createSqliteRepos } from './repositories/sqlite/index.js';
 import healthRoutes from './routes/health.js';
 import taskRoutes from './routes/tasks.js';
 import versionRoutes from './routes/version.js';
@@ -38,7 +39,7 @@ export function toHttpError(err) {
 }
 
 export function buildApp({
-  repos = createMemoryRepos(),
+  repos,
   db,
   version = 'unknown',
   now = () => new Date(),
@@ -55,6 +56,8 @@ export function buildApp({
 
   const events = new EventBus();
   registerHistoryRecorder(events);
+  // Етап 2: з db — SQLite-репозиторії; без db — in-memory (прототип, unit-тести).
+  repos ??= db ? createSqliteRepos(db) : createMemoryRepos();
   const service = new TaskService({ repos, events, strategies, now });
 
   // Контекст запиту для всіх шарів (ADR 0010).
@@ -95,7 +98,7 @@ export function gitSha() {
   }
 }
 
-// Етап 1 (прототип): in-memory репозиторії; БД відкривається лише для перевірки схеми.
+// Етап 2: сервер працює на SQLite (DB_PATH).
 if (import.meta.main) {
   const db = openDb(process.env.DB_PATH ?? './data/deadlinehub.db');
   await buildApp({ db, version: gitSha() }).listen({ port: Number(process.env.PORT ?? 3000) });
