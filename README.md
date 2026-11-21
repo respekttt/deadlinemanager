@@ -32,7 +32,11 @@ make run           # http://localhost:3000
 
 Потрібні Bun ≥ 1.3 і GNU Make. У Windows `make` за замовчуванням немає: `winget install ezwinports.make` (хуки працюють через Git Bash).
 
-Змінні середовища: `PORT` (за замовчуванням `3000`), `DB_PATH` (за замовчуванням `./data/deadlinehub.db`), `GIT_SHA` (версія для `GET /version`; за замовчуванням — `git rev-parse --short HEAD`).
+Змінні середовища: `PORT` (за замовчуванням `3000`), `DB_PATH` (за замовчуванням `./data/deadlinehub.db`), `GIT_SHA` (версія для `GET /version`; за замовчуванням — `git rev-parse --short HEAD`), `LOG_LEVEL` (за замовчуванням `info`; `debug` показує кожну операцію сховища).
+
+Заголовки запиту: `X-User-Id` (ініціатор, інакше `anonymous`), `X-Request-Id` (ID бізнес-процесу, інакше генерується; завжди повертається у відповіді), `Idempotency-Key` для `POST /tasks`.
+
+> Дані зберігаються в SQLite (`DB_PATH`). In-memory репозиторії (`server/repositories/memory`) лишилися для unit-тестів; API-тести проходять на обох сховищах.
 
 ```bash
 curl -X POST localhost:3000/tasks -H 'Content-Type: application/json' \
@@ -75,6 +79,7 @@ tests/                unit- і API-тести
 
 ## Документи
 
+- DEFENSE: [завдання 1](defense.md), [завдання 2](DEFENSE-task2.md).
 - [Специфікація](standards/spec.md) — модулі, дані, сценарії, критерії прийняття.
 - [Definition of Done](standards/definition-of-done.md)
 - [Чекліст перевірок](standards/checklist.md)

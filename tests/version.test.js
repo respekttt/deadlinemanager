@@ -3,7 +3,7 @@ import { openDb } from '../server/db/index.js';
 import { buildApp, gitSha } from '../server/main.js';
 
 test('AC-16: GET /version → 200 { version } із sha, переданим у buildApp', async () => {
-  const app = buildApp({ db: openDb(':memory:'), version: 'abc1234' });
+  const app = buildApp({ db: openDb(':memory:'), version: 'abc1234', logger: false });
   const res = await app.inject({ method: 'GET', url: '/version' });
   expect(res.statusCode).toBe(200);
   expect(res.json()).toEqual({ version: 'abc1234' });
