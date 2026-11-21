@@ -79,6 +79,7 @@ tests/                unit- і API-тести
 
 ## Документи
 
+- DEFENSE: [завдання 1](defense.md), [завдання 2](DEFENSE-task2.md).
 - [Специфікація](standards/spec.md) — модулі, дані, сценарії, критерії прийняття.
 - [Definition of Done](standards/definition-of-done.md)
 - [Чекліст перевірок](standards/checklist.md)
