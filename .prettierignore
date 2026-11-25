@@ -3,3 +3,5 @@ coverage/
 data/
 bun.lock
 ai/sessions/
+# зовнішній курсовий документ — без переформатування
+standards/Definition of Done — з AI.md

@@ -20,7 +20,15 @@ CREATE TABLE IF NOT EXISTS task_history (
   task_id INTEGER NOT NULL REFERENCES tasks (id),
   from_status TEXT NULL,
   to_status TEXT NOT NULL,
+  changed_by TEXT NOT NULL,
   changed_at DATETIME NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS idempotency_keys (
+  key TEXT PRIMARY KEY,
+  request_hash TEXT NOT NULL,
+  task_id INTEGER NOT NULL REFERENCES tasks (id),
+  created_at DATETIME NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS reminders (

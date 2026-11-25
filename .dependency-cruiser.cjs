@@ -33,6 +33,20 @@ module.exports = {
       to: { path: '^server/domain/', pathNot: '^server/domain/(errors|schemas)\\.js$' },
     },
     {
+      name: 'context-isolated',
+      comment: 'context.js не залежить від інших модулів server/, fastify, bun:sqlite (ADR 0010)',
+      severity: 'error',
+      from: { path: '^server/context\\.js$' },
+      to: { path: ['^server/', FASTIFY, SQLITE] },
+    },
+    {
+      name: 'repositories-no-upper-layers',
+      comment: 'repositories не залежить від services і routes',
+      severity: 'error',
+      from: { path: '^server/repositories/' },
+      to: { path: '^server/(services|routes)/' },
+    },
+    {
       name: 'sqlite-only-in-db-and-repositories',
       comment: 'bun:sqlite імпортують лише server/db і server/repositories',
       severity: 'error',
